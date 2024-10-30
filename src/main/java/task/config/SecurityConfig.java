@@ -36,10 +36,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 public class SecurityConfig {
 
-
     @Autowired
     UserDetailsService userDetailsService;
-
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
@@ -48,11 +46,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/login").permitAll() // Allow login without authentication
-                        .requestMatchers("/v3/api-docs/**").permitAll() // Allow access to Swagger docs
-                        .requestMatchers("/swagger-ui/**").permitAll() // Allow access to Swagger UI
-                        .requestMatchers("/api/v1/customers/create-customer").hasRole("ADMIN") // Only ADMIN can create customers
-                        .requestMatchers("/api/v1/customers/get-all-customers").hasAnyRole("ADMIN", "DIRECTOR") // Both ADMIN and DIRECTOR can access
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/api/v1/customers/create-customer").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/customers/get-all-customers").hasAnyRole("ADMIN", "DIRECTOR")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -66,7 +64,7 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:3000") // Buraya frontend'in URL'sini əlavə edin
+                registry.addMapping("/**").allowedOrigins("http://localhost:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
             }
         };
